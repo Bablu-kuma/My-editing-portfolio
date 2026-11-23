@@ -9,14 +9,12 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff6a3d'/%3E%3Cpath d='M12 9l11 7-11 7z' fill='%23160a06'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add('js')</script>
 <style>
 /* ---------- tokens ---------- */
 :root{--bg:#0b0b0e;--panel:#131317;--panel2:#1a1a1f;--line:#26262d;--text:#fff;--mute:#9d9da8;--accent:#ff6a3d;--accent2:#ff8a63;--ink:#160a06;
---head:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;--body:'Manrope','Segoe UI',system-ui,sans-serif;
---ease:cubic-bezier(.22,1,.36,1);--t-fast:.25s;--t:.45s;--t-slow:.8s}
+--head:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;--body:'Manrope','Segoe UI',system-ui,sans-serif}
 *{box-sizing:border-box;margin:0}
 [hidden]{display:none!important}
 html{scroll-behavior:smooth}
@@ -30,48 +28,28 @@ h1,h2,h3{font-family:var(--head);line-height:1.05;letter-spacing:-.02em}
 h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;margin-bottom:14px}
 .eyebrow{display:block;font-size:.76rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
 .lead{color:var(--mute);max-width:56ch}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;font-weight:600;border:1px solid var(--line);cursor:pointer;font-family:var(--body);font-size:1rem;color:var(--text);background:none;
-transition:transform var(--t-fast) var(--ease),background-color var(--t-fast),border-color var(--t-fast),color var(--t-fast),box-shadow var(--t) var(--ease)}
-.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;font-weight:600;border:1px solid var(--line);transition:.2s;cursor:pointer;font-family:var(--body);font-size:1rem;color:var(--text);background:none}
 .btn.primary{background:var(--accent);color:var(--ink);border-color:var(--accent)}
-.btn.primary:hover{background:var(--accent2);border-color:var(--accent2);transform:translateY(-2px);box-shadow:0 12px 30px -12px rgba(255,106,61,.65)}
-.btn:not(.primary):hover{border-color:var(--text);transform:translateY(-2px)}
-.btn:active,.btn.primary:active{transform:translateY(0) scale(.97);box-shadow:none}
-
-/* ---------- shared motion ---------- */
-@keyframes rise{from{opacity:0;transform:translate3d(0,22px,0)}to{opacity:1;transform:none}}
-@keyframes reelIn{from{opacity:0;transform:translate3d(0,28px,0) scale(.95)}to{opacity:1;transform:none}}
-@keyframes navIn{from{opacity:0;transform:translate3d(0,-14px,0)}to{opacity:1;transform:none}}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes ring{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.75);opacity:0}}
-.hero-in{animation:rise .9s var(--ease) calc(var(--i,0)*.09s + .08s) backwards}
+.btn.primary:hover{background:var(--accent2);border-color:var(--accent2);transform:translateY(-1px)}
+.btn:not(.primary):hover{border-color:var(--text)}
 
 /* ---------- nav ---------- */
-nav{position:sticky;top:0;z-index:20;background:rgba(11,11,14,.6);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid transparent;
-transition:background-color var(--t) var(--ease),border-color var(--t) var(--ease),box-shadow var(--t) var(--ease);animation:navIn .7s var(--ease) backwards}
-nav.scrolled{background:rgba(11,11,14,.88);border-bottom-color:var(--line);box-shadow:0 14px 34px -24px rgba(0,0,0,.9)}
+nav{position:sticky;top:0;z-index:20;background:rgba(11,11,14,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 nav .wrap{display:flex;justify-content:space-between;align-items:center;height:64px;gap:16px}
 .logo{font-family:var(--head);font-weight:800;font-size:1.15rem}
 .logo::after{content:".";color:var(--accent)}
 nav ul{display:flex;gap:28px;list-style:none;padding:0;font-size:.92rem;color:var(--mute);margin-left:auto}
-nav ul a{position:relative;display:inline-block;padding:6px 0;transition:color var(--t-fast)}
-nav ul a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform var(--t) var(--ease)}
-nav ul a:hover,nav ul a.active{color:var(--text)}
-nav ul a:hover::after,nav ul a.active::after{transform:scaleX(1)}
+nav ul a:hover{color:var(--text)}
 .nav-cta{padding:9px 20px;font-size:.9rem}
-.menu{display:none;width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:none;color:var(--text);cursor:pointer;align-items:center;justify-content:center;transition:border-color var(--t-fast),transform var(--t-fast) var(--ease)}
-.menu:hover{border-color:var(--text)}
-.menu:active{transform:scale(.94)}
+.menu{display:none;width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:none;color:var(--text);cursor:pointer;align-items:center;justify-content:center}
 .menu svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
 @media(max-width:720px){
   .menu{display:inline-flex}
   nav .wrap{justify-content:flex-start}
   .logo{margin-right:auto}
-  nav ul{display:flex;visibility:hidden;opacity:0;transform:translate3d(0,-8px,0);pointer-events:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;gap:0;margin:0;background:var(--bg);border-bottom:1px solid var(--line);padding:6px clamp(20px,5vw,40px) 14px;
-  transition:opacity .3s var(--ease),transform .3s var(--ease),visibility .3s}
-  nav.open ul{visibility:visible;opacity:1;transform:none;pointer-events:auto}
+  nav ul{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;gap:0;margin:0;background:var(--bg);border-bottom:1px solid var(--line);padding:6px clamp(20px,5vw,40px) 14px}
+  nav.open ul{display:flex}
   nav ul a{display:block;padding:13px 0;font-size:1rem;border-bottom:1px solid var(--line)}
-  nav ul a::after{display:none}
   nav ul li:last-child a{border-bottom:0}
 }
 
@@ -88,31 +66,21 @@ nav ul a:hover::after,nav ul a.active::after{transform:scaleX(1)}
 .status{display:inline-flex;align-items:center;gap:10px;margin-top:28px;font-size:.85rem;color:var(--mute);padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.02)}
 .status i{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(255,106,61,.6);animation:pulse 2.4s infinite}
 @keyframes pulse{70%{box-shadow:0 0 0 9px rgba(255,106,61,0)}100%{box-shadow:0 0 0 0 rgba(255,106,61,0)}}
-.reel{position:relative;aspect-ratio:9/16;max-height:560px;margin:0 auto;width:100%;max-width:315px;border-radius:26px;border:1px solid var(--line);overflow:hidden;display:grid;place-items:center;cursor:pointer;
-transition:transform .5s var(--ease),border-color var(--t-fast),box-shadow var(--t) var(--ease);animation:reelIn 1.1s var(--ease) .3s backwards;
+.reel{position:relative;aspect-ratio:9/16;max-height:560px;margin:0 auto;width:100%;max-width:315px;border-radius:26px;border:1px solid var(--line);overflow:hidden;display:grid;place-items:center;cursor:pointer;transition:transform .4s cubic-bezier(.2,.7,.2,1),border-color .25s,box-shadow .25s;
 background:radial-gradient(120% 70% at 20% 0%,rgba(255,106,61,.3),transparent 60%),repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 18px),#121217}
-.reel[data-state=idle]:hover{transform:translateY(-5px) rotate(-.6deg);border-color:var(--accent);box-shadow:0 24px 60px -24px rgba(255,106,61,.45)}
-.reel:not([data-state=idle]){cursor:default;border-color:rgba(255,106,61,.5)}
-.reel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;pointer-events:none;transition:opacity .6s ease;background:#000}
+.reel:hover{transform:translateY(-5px) rotate(-.6deg);border-color:var(--accent);box-shadow:0 24px 60px -24px rgba(255,106,61,.45)}
+.reel img,.reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.reel video{opacity:0;transition:opacity .6s ease;background:#000}
 .reel.ready video{opacity:1}
-.reel:not([data-state=idle]) video{object-fit:contain}
 .reel .ph,.reel .caps{transition:opacity .4s}
 .reel.ready .ph,.reel.ready .caps{opacity:0}
-.reel:not([data-state=idle]) .ph,.reel:not([data-state=idle]) .caps,.reel:not([data-state=idle]) .sound{opacity:0;visibility:hidden}
 .reel.failed video{display:none}
-.sound{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:2;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);font-size:.78rem;font-weight:600;white-space:nowrap;pointer-events:none;transition:opacity .4s,visibility .4s}
+.sound{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:2;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);font-size:.78rem;font-weight:600;white-space:nowrap;pointer-events:none}
 .sound svg{width:11px;fill:var(--accent)}
 .reel .ph{color:var(--mute);font-size:.85rem;text-align:center;padding:0 24px;position:relative}
-
-/* orange play button (shared by hero + cards) */
-.play{position:relative;width:68px;height:68px;border-radius:50%;background:var(--accent);display:grid;place-items:center;margin:0 auto 14px;border:0;padding:0;cursor:pointer;
-box-shadow:0 10px 30px -10px rgba(255,106,61,.65);transition:transform .4s var(--ease),background-color var(--t-fast),box-shadow var(--t) var(--ease),opacity .3s}
-.play::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--accent);opacity:0;pointer-events:none}
+.play{width:68px;height:68px;border-radius:50%;background:var(--accent);display:grid;place-items:center;margin:0 auto 14px;transition:transform .25s}
 .play svg{width:24px;fill:var(--ink);margin-left:4px}
-.reel:hover .play,.play:hover{transform:scale(1.08);background:var(--accent2);box-shadow:0 14px 36px -10px rgba(255,106,61,.8)}
-.reel[data-state=idle]:hover .play::after,.thumb:hover .play::after,.play:focus-visible::after{animation:ring 1.8s var(--ease) infinite}
-@media(hover:none){.reel[data-state=idle] .play::after,.card[data-state=idle] .play::after{animation:ring 2.8s var(--ease) infinite}}
+.reel:hover .play{transform:scale(1.08)}
 .caps{position:absolute;left:0;right:0;bottom:12%;text-align:center;font:800 1.5rem var(--head);padding:0 16px;pointer-events:none}
 .caps span{background:var(--accent);color:var(--ink);padding:2px 10px;border-radius:6px}
 .reel.has-poster .caps{display:none}
@@ -127,26 +95,6 @@ box-shadow:0 10px 30px -10px rgba(255,106,61,.65);transition:transform .4s var(-
 .playhead::before{content:"";position:absolute;top:0;left:-5px;border:6px solid transparent;border-top-color:var(--accent)}
 @keyframes sweep{from{left:16px}to{left:calc(100% - 18px)}}
 @media(max-width:820px){.hero .wrap{grid-template-columns:1fr}.reel{max-width:260px}}
-
-/* ---------- inline player overlays (hero reel + project cards) ---------- */
-.vs{position:absolute;inset:0;z-index:3;display:grid;place-content:center;justify-items:center;gap:12px;text-align:center;padding:16px;
-background:radial-gradient(120% 70% at 50% 0%,rgba(255,106,61,.2),transparent 60%),rgba(12,12,16,.62);
-opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s var(--ease),visibility .35s}
-.vs p{font-size:.85rem;color:#d4d4da;max-width:26ch}
-.vs .retry{display:none;pointer-events:auto;padding:10px 20px;font-size:.88rem}
-.spin{width:40px;height:40px;border-radius:50%;border:2.5px solid rgba(255,255,255,.14);border-top-color:var(--accent);box-shadow:0 0 22px -4px rgba(255,106,61,.35);animation:spin .85s linear infinite;animation-play-state:paused}
-[data-state=loading] .vs,[data-state=buffering] .vs,[data-state=error] .vs{opacity:1;visibility:visible}
-[data-state=loading] .spin,[data-state=buffering] .spin{animation-play-state:running}
-[data-state=buffering] .vs{background:rgba(0,0,0,.3)}
-[data-state=buffering] .vs p{display:none}
-[data-state=error] .spin{display:none}
-[data-state=error] .vs p{color:#fff}
-[data-state=error] .vs .retry{display:inline-flex}
-.rp{position:absolute;inset:0;z-index:3;display:grid;place-items:center;background:rgba(0,0,0,.5);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .4s var(--ease),visibility .4s}
-.rp .btn{pointer-events:auto;padding:11px 22px;font-size:.92rem}
-[data-state=ended] .rp{opacity:1;visibility:visible}
-/* the video fades in once playback starts (crossfade from the thumbnail) */
-[data-state=playing] video,[data-state=buffering] video,[data-state=ended] video{opacity:1;pointer-events:auto}
 
 /* ---------- about ---------- */
 .about .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(32px,6vw,80px);align-items:start}
@@ -163,56 +111,47 @@ opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s var(--ea
 
 /* ---------- services ---------- */
 .services{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-top:44px}
-.svc{position:relative;background:var(--bg);padding:32px 28px;transition:background-color var(--t) var(--ease)}
+.svc{position:relative;background:var(--bg);padding:32px 28px;transition:background .25s}
 .svc:hover{background:var(--panel)}
-.svc .n{position:absolute;top:28px;right:28px;font-size:.78rem;font-weight:700;color:#3a3a43;transition:color var(--t)}
+.svc .n{position:absolute;top:28px;right:28px;font-size:.78rem;font-weight:700;color:#3a3a43;transition:color .25s}
 .svc:hover .n{color:var(--accent)}
-.svc svg{width:30px;height:30px;stroke:var(--accent);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:22px;transition:transform .5s var(--ease)}
+.svc svg{width:30px;height:30px;stroke:var(--accent);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:22px;transition:transform .3s}
 .svc:hover svg{transform:translateY(-3px)}
 .svc h3{font-size:1.25rem;margin-bottom:8px}
 .svc p{color:var(--mute);font-size:.95rem}
 
 /* ---------- projects ---------- */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:26px 22px;margin-top:44px}
-.card{display:flex;flex-direction:column;-webkit-tap-highlight-color:transparent}
-.thumb{position:relative;border-radius:18px;overflow:hidden;isolation:isolate;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;
-transition:transform .5s var(--ease),border-color var(--t-fast),box-shadow var(--t) var(--ease)}
-.card[data-state=idle] .thumb{cursor:pointer}
-.card[data-state=idle]:hover .thumb,.card[data-state=idle]:focus-within .thumb{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 20px 44px -20px rgba(255,106,61,.4)}
-.card[data-state=playing] .thumb,.card[data-state=buffering] .thumb,.card[data-state=ended] .thumb{border-color:rgba(255,106,61,.5)}
-.ph-art{position:absolute;inset:0;display:grid;place-items:center;transition:transform .9s var(--ease);
+.card{display:flex;flex-direction:column;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.card:focus-visible{outline-offset:6px;border-radius:18px}
+.thumb{position:relative;border-radius:18px;overflow:hidden;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .25s,box-shadow .25s}
+.card:hover .thumb,.card:focus-visible .thumb{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 20px 44px -20px rgba(255,106,61,.4)}
+.ph-art{position:absolute;inset:0;display:grid;place-items:center;
 background:linear-gradient(var(--a,160deg),rgba(255,106,61,.28),transparent 58%),repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 18px),#121217}
 .ph-num{font:800 clamp(3.2rem,9vw,4.6rem)/1 var(--head);letter-spacing:-.04em;color:rgba(255,255,255,.14);transform:translateY(-14px)}
 .ph-lbl{position:absolute;left:0;right:0;bottom:14px;text-align:center;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
-.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease)}
-.card[data-state=idle]:hover .thumb img,.card[data-state=idle]:hover .ph-art{transform:scale(1.05)}
-.thumb video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:contain;background:#000;opacity:0;pointer-events:none;transition:opacity .55s var(--ease)}
-.thumb .play{position:absolute;width:58px;height:58px;margin:0;opacity:.95;z-index:2}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.thumb .play{position:absolute;width:58px;height:58px;margin:0;opacity:.95;z-index:2;box-shadow:0 8px 24px rgba(0,0,0,.4)}
 .thumb .play svg{width:20px}
-.card:hover .thumb .play{transform:scale(1.1)}
-.card .thumb .play:active{transform:scale(.94)}
-.card:not([data-state=idle]) .thumb .play{opacity:0;transform:scale(.7);pointer-events:none;visibility:hidden}
+.card:hover .play{transform:scale(1.1)}
 .card h3{font-size:1.2rem;margin:16px 0 4px}
 .cat{color:var(--accent);font-size:.85rem;font-weight:600}
 .card p{color:var(--mute);font-size:.92rem;margin-top:8px}
-.card>.watch{align-self:flex-start;margin-top:14px;padding:10px 20px;font-size:.9rem}
-.card:hover>.watch{border-color:var(--accent);color:var(--accent)}
+.card .btn{align-self:flex-start;margin-top:14px;padding:10px 20px;font-size:.9rem}
+.card:hover .btn{border-color:var(--accent);color:var(--accent)}
 @media(max-width:560px){
   .grid{grid-template-columns:repeat(2,1fr);gap:22px 14px}
   .thumb .play{width:44px;height:44px}.thumb .play svg{width:16px}
   .card h3{font-size:1rem;margin-top:12px}.cat{font-size:.78rem}.card p{font-size:.85rem}
-  .card>.watch{display:none}
-  .spin{width:30px;height:30px}
-  .vs{gap:8px;padding:10px}.vs p{font-size:.74rem}
-  .vs .retry,.rp .btn{padding:8px 14px;font-size:.8rem}
+  .card .btn{display:none}
 }
 
 /* ---------- skills ---------- */
 .skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:40px;margin-top:44px}
 .skills h3{font-size:1.1rem;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line)}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{padding:8px 16px;border:1px solid var(--line);border-radius:999px;font-size:.9rem;color:#dcdce0;transition:border-color var(--t-fast),color var(--t-fast),transform var(--t) var(--ease)}
-.chip:hover{border-color:var(--accent);color:#fff;transform:translateY(-2px)}
+.chip{padding:8px 16px;border:1px solid var(--line);border-radius:999px;font-size:.9rem;color:#dcdce0;transition:border-color .2s,color .2s}
+.chip:hover{border-color:var(--accent);color:#fff}
 .chip.tool{border-color:var(--accent);color:var(--accent);font-weight:700}
 .note{display:block;margin-top:12px;font-size:.82rem;color:var(--mute)}
 
@@ -230,11 +169,89 @@ background:linear-gradient(var(--a,160deg),rgba(255,106,61,.28),transparent 58%)
 /* ---------- contact ---------- */
 .contact h2{font-size:clamp(2.4rem,7vw,5rem);max-width:14ch}
 .links{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:40px 0}
-.links a{display:block;padding:20px 22px;border:1px solid var(--line);border-radius:14px;position:relative;transition:border-color var(--t-fast),background-color var(--t-fast),transform var(--t) var(--ease)}
-.links a::after{content:"↗";position:absolute;top:18px;right:20px;color:var(--mute);transition:transform var(--t) var(--ease),color var(--t-fast)}
-.links a:hover{border-color:var(--accent);background:var(--panel);transform:translateY(-2px)}
+.links a{display:block;padding:20px 22px;border:1px solid var(--line);border-radius:14px;transition:.2s;position:relative}
+.links a::after{content:"↗";position:absolute;top:18px;right:20px;color:var(--mute);transition:.2s}
+.links a:hover{border-color:var(--accent);background:var(--panel)}
 .links a:hover::after{color:var(--accent);transform:translate(2px,-2px)}
-.links a:active{transform:scale(.98)}
 .links a.wa{border-color:var(--accent)}
 .links small{display:block;color:var(--mute);font-size:.8rem}
-.links span{font-weight:600;overflo
+.links span{font-weight:600;overflow-wrap:anywhere}
+footer{border-top:1px solid var(--line);padding:28px 0;color:var(--mute);font-size:.85rem}
+
+/* ---------- video modal ---------- */
+dialog{--r:.5625;--mw:420px;position:fixed;border:1px solid var(--line);background:#000;color:#fff;border-radius:18px;padding:0;width:min(92vw,var(--mw),calc(80vh*var(--r)));max-height:94vh;overflow:hidden;transition:width .25s ease}
+dialog::backdrop{background:rgba(0,0,0,.82);backdrop-filter:blur(3px)}
+dialog .frame{position:relative;width:100%;aspect-ratio:9/16;background:#000}
+dialog video{width:100%;height:100%;display:block;object-fit:contain;background:#000}
+/* Loading / error overlay. Initial load uses a branded dark gradient (never a blank black box);
+   .light is used for mid-playback buffering so the paused frame stays visible. */
+.state{position:absolute;inset:0;z-index:1;display:grid;place-content:center;justify-items:center;gap:14px;text-align:center;padding:24px;
+background:radial-gradient(120% 70% at 50% 0%,rgba(255,106,61,.25),transparent 60%),rgba(12,12,16,.8);
+color:#d4d4da;font-size:.95rem;pointer-events:none;transition:background .25s}
+.state.light{background:rgba(0,0,0,.35)}
+.state .btn{pointer-events:auto;padding:10px 22px;font-size:.9rem}
+.spin{width:38px;height:38px;border:3px solid rgba(255,255,255,.18);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.dfoot{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 14px;font-size:.82rem;color:var(--mute);background:var(--bg);border-top:1px solid var(--line)}
+.close{position:absolute;top:10px;right:10px;z-index:2;width:38px;height:38px;border-radius:50%;border:0;background:rgba(0,0,0,.7);color:#fff;font-size:1.2rem;cursor:pointer}
+
+/* ---------- reveal animation ---------- */
+.js .rv{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+.js .rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .playhead{animation:none;left:35%}
+  .status i{animation:none}
+  .spin{animation-duration:2.4s}
+  .js .rv{opacity:1;transform:none;transition:none}
+  .card:hover .thumb,.reel:hover{transform:none}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav"><div class="wrap">
+  <a class="logo" href="#top" data-t="name">Bablu Kumar</a>
+  <ul id="menu">
+    <li><a href="#about">About</a></li><li><a href="#services">Services</a></li><li><a href="#work">Work</a></li><li><a href="#skills">Skills</a></li><li><a href="#process">Workflow</a></li>
+  </ul>
+  <a class="btn primary nav-cta" href="#contact">Hire me</a>
+  <button class="menu" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+  <div>
+    <div class="role"><b data-t="name">Bablu Kumar</b><span>·</span><span data-t="role">Video Editor</span><span>·</span><span data-t="location">Patna, Bihar, India</span></div>
+    <h1>I Turn Raw Footage Into <em>Scroll-Stopping</em> Videos.</h1>
+    <p class="lead">I'm a video editor with 6–12 months of hands-on experience editing short-form, talking-head and educational videos in Premiere Pro and After Effects. I build each edit around a clear hook, steady pacing and sound that keeps people watching, for creators, agencies and brands.</p>
+    <div class="ctas"><a class="btn primary" href="#work">View My Work</a><a class="btn" href="#contact">Contact Me</a></div>
+    <div class="status"><i></i>Open to freelance projects and full-time roles</div>
+  </div>
+  <div class="reel" id="reel" role="button" tabindex="0" aria-label="Open sample video with sound">
+    <video id="heroVideo" muted loop playsinline preload="none" disablepictureinpicture aria-hidden="true" tabindex="-1"></video>
+    <div class="ph"><div class="play"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></div><span id="reelLbl">Watch a sample</span></div>
+    <div class="caps"><span>HOOK</span> FIRST</div>
+    <span class="sound"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg>Tap to watch with sound</span>
+  </div>
+  <div class="timeline" style="grid-column:1/-1" aria-hidden="true">
+    <div class="tl-meta"><span>Sequence 01</span><span>Hook · Story · Payoff</span></div>
+    <div class="track"><i class="hot" style="--w:3"></i><i style="--w:6"></i><i class="a" style="--w:4"></i><i style="--w:7"></i><i class="a" style="--w:3"></i><i style="--w:6"></i><i class="hot" style="--w:2"></i></div>
+    <div class="track"><i class="g" style="--w:5"></i><i class="g" style="--w:2"></i><i class="g" style="--w:8"></i><i class="g" style="--w:4"></i><i class="g" style="--w:6"></i></div>
+    <div class="track"><i class="a" style="--w:2"></i><i class="a" style="--w:1"></i><i class="a" style="--w:3"></i><i class="a" style="--w:1"></i><i class="a" style="--w:2"></i><i class="a" style="--w:3"></i><i class="a" style="--w:2"></i><i class="a" style="--w:1"></i></div>
+    <div class="playhead"></div>
+  </div>
+</div></header>
+
+<section class="about" id="about"><div class="wrap">
+  <dl class="facts rv">
+    <div><dt>Based in</dt><dd data-t="location">Patna, Bihar, India</dd></div>
+    <div><dt>Experience</dt><dd>6–12 months in video editing</dd></div>
+    <div><dt>Primary software</dt><dd>Premiere Pro, After Effects</dd></div>
+    <div><dt>Open to</dt><dd>Freelance projects and full-time roles</dd></div>
+  </dl>
+  <div class="rv" style="--d:.1s">
+    <span class="eyebrow">01 · About me</span>
+    <h2>Editing that respects the viewer's time.</h2>
+    <p class="big">I'm a video editor based in Patna, India, with 6–12 months of hands-on editing experience.</p>
+    <p>I focus on short-form content, talking-head videos and educational or AI-automation explainers. I edit in Premiere Pro and After Effects, building each video around a clear hook, steady pacing, dynamic captions, B-roll and sound design so the story stays easy to follow.</p>
+    <p>I'm early in my editing career and keen to keep improving. I'm open to freelance projects as
