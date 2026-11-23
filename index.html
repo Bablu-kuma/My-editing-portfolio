@@ -9,12 +9,14 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff6a3d'/%3E%3Cpath d='M12 9l11 7-11 7z' fill='%23160a06'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add('js')</script>
 <style>
 /* ---------- tokens ---------- */
 :root{--bg:#0b0b0e;--panel:#131317;--panel2:#1a1a1f;--line:#26262d;--text:#fff;--mute:#9d9da8;--accent:#ff6a3d;--accent2:#ff8a63;--ink:#160a06;
---head:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;--body:'Manrope','Segoe UI',system-ui,sans-serif}
+--head:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;--body:'Manrope','Segoe UI',system-ui,sans-serif;
+--ease:cubic-bezier(.22,1,.36,1);--t-fast:.25s;--t:.45s;--t-slow:.8s}
 *{box-sizing:border-box;margin:0}
 [hidden]{display:none!important}
 html{scroll-behavior:smooth}
@@ -28,28 +30,48 @@ h1,h2,h3{font-family:var(--head);line-height:1.05;letter-spacing:-.02em}
 h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;margin-bottom:14px}
 .eyebrow{display:block;font-size:.76rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
 .lead{color:var(--mute);max-width:56ch}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;font-weight:600;border:1px solid var(--line);transition:.2s;cursor:pointer;font-family:var(--body);font-size:1rem;color:var(--text);background:none}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;font-weight:600;border:1px solid var(--line);cursor:pointer;font-family:var(--body);font-size:1rem;color:var(--text);background:none;
+transition:transform var(--t-fast) var(--ease),background-color var(--t-fast),border-color var(--t-fast),color var(--t-fast),box-shadow var(--t) var(--ease)}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .btn.primary{background:var(--accent);color:var(--ink);border-color:var(--accent)}
-.btn.primary:hover{background:var(--accent2);border-color:var(--accent2);transform:translateY(-1px)}
-.btn:not(.primary):hover{border-color:var(--text)}
+.btn.primary:hover{background:var(--accent2);border-color:var(--accent2);transform:translateY(-2px);box-shadow:0 12px 30px -12px rgba(255,106,61,.65)}
+.btn:not(.primary):hover{border-color:var(--text);transform:translateY(-2px)}
+.btn:active,.btn.primary:active{transform:translateY(0) scale(.97);box-shadow:none}
+
+/* ---------- shared motion ---------- */
+@keyframes rise{from{opacity:0;transform:translate3d(0,22px,0)}to{opacity:1;transform:none}}
+@keyframes reelIn{from{opacity:0;transform:translate3d(0,28px,0) scale(.95)}to{opacity:1;transform:none}}
+@keyframes navIn{from{opacity:0;transform:translate3d(0,-14px,0)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes ring{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.75);opacity:0}}
+.hero-in{animation:rise .9s var(--ease) calc(var(--i,0)*.09s + .08s) backwards}
 
 /* ---------- nav ---------- */
-nav{position:sticky;top:0;z-index:20;background:rgba(11,11,14,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav{position:sticky;top:0;z-index:20;background:rgba(11,11,14,.6);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid transparent;
+transition:background-color var(--t) var(--ease),border-color var(--t) var(--ease),box-shadow var(--t) var(--ease);animation:navIn .7s var(--ease) backwards}
+nav.scrolled{background:rgba(11,11,14,.88);border-bottom-color:var(--line);box-shadow:0 14px 34px -24px rgba(0,0,0,.9)}
 nav .wrap{display:flex;justify-content:space-between;align-items:center;height:64px;gap:16px}
 .logo{font-family:var(--head);font-weight:800;font-size:1.15rem}
 .logo::after{content:".";color:var(--accent)}
 nav ul{display:flex;gap:28px;list-style:none;padding:0;font-size:.92rem;color:var(--mute);margin-left:auto}
-nav ul a:hover{color:var(--text)}
+nav ul a{position:relative;display:inline-block;padding:6px 0;transition:color var(--t-fast)}
+nav ul a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform var(--t) var(--ease)}
+nav ul a:hover,nav ul a.active{color:var(--text)}
+nav ul a:hover::after,nav ul a.active::after{transform:scaleX(1)}
 .nav-cta{padding:9px 20px;font-size:.9rem}
-.menu{display:none;width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:none;color:var(--text);cursor:pointer;align-items:center;justify-content:center}
+.menu{display:none;width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:none;color:var(--text);cursor:pointer;align-items:center;justify-content:center;transition:border-color var(--t-fast),transform var(--t-fast) var(--ease)}
+.menu:hover{border-color:var(--text)}
+.menu:active{transform:scale(.94)}
 .menu svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
 @media(max-width:720px){
   .menu{display:inline-flex}
   nav .wrap{justify-content:flex-start}
   .logo{margin-right:auto}
-  nav ul{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;gap:0;margin:0;background:var(--bg);border-bottom:1px solid var(--line);padding:6px clamp(20px,5vw,40px) 14px}
-  nav.open ul{display:flex}
+  nav ul{display:flex;visibility:hidden;opacity:0;transform:translate3d(0,-8px,0);pointer-events:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;gap:0;margin:0;background:var(--bg);border-bottom:1px solid var(--line);padding:6px clamp(20px,5vw,40px) 14px;
+  transition:opacity .3s var(--ease),transform .3s var(--ease),visibility .3s}
+  nav.open ul{visibility:visible;opacity:1;transform:none;pointer-events:auto}
   nav ul a{display:block;padding:13px 0;font-size:1rem;border-bottom:1px solid var(--line)}
+  nav ul a::after{display:none}
   nav ul li:last-child a{border-bottom:0}
 }
 
@@ -66,21 +88,31 @@ nav ul a:hover{color:var(--text)}
 .status{display:inline-flex;align-items:center;gap:10px;margin-top:28px;font-size:.85rem;color:var(--mute);padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.02)}
 .status i{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(255,106,61,.6);animation:pulse 2.4s infinite}
 @keyframes pulse{70%{box-shadow:0 0 0 9px rgba(255,106,61,0)}100%{box-shadow:0 0 0 0 rgba(255,106,61,0)}}
-.reel{position:relative;aspect-ratio:9/16;max-height:560px;margin:0 auto;width:100%;max-width:315px;border-radius:26px;border:1px solid var(--line);overflow:hidden;display:grid;place-items:center;cursor:pointer;transition:transform .4s cubic-bezier(.2,.7,.2,1),border-color .25s,box-shadow .25s;
+.reel{position:relative;aspect-ratio:9/16;max-height:560px;margin:0 auto;width:100%;max-width:315px;border-radius:26px;border:1px solid var(--line);overflow:hidden;display:grid;place-items:center;cursor:pointer;
+transition:transform .5s var(--ease),border-color var(--t-fast),box-shadow var(--t) var(--ease);animation:reelIn 1.1s var(--ease) .3s backwards;
 background:radial-gradient(120% 70% at 20% 0%,rgba(255,106,61,.3),transparent 60%),repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 18px),#121217}
-.reel:hover{transform:translateY(-5px) rotate(-.6deg);border-color:var(--accent);box-shadow:0 24px 60px -24px rgba(255,106,61,.45)}
-.reel img,.reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.reel video{opacity:0;transition:opacity .6s ease;background:#000}
+.reel[data-state=idle]:hover{transform:translateY(-5px) rotate(-.6deg);border-color:var(--accent);box-shadow:0 24px 60px -24px rgba(255,106,61,.45)}
+.reel:not([data-state=idle]){cursor:default;border-color:rgba(255,106,61,.5)}
+.reel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;pointer-events:none;transition:opacity .6s ease;background:#000}
 .reel.ready video{opacity:1}
+.reel:not([data-state=idle]) video{object-fit:contain}
 .reel .ph,.reel .caps{transition:opacity .4s}
 .reel.ready .ph,.reel.ready .caps{opacity:0}
+.reel:not([data-state=idle]) .ph,.reel:not([data-state=idle]) .caps,.reel:not([data-state=idle]) .sound{opacity:0;visibility:hidden}
 .reel.failed video{display:none}
-.sound{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:2;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);font-size:.78rem;font-weight:600;white-space:nowrap;pointer-events:none}
+.sound{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:2;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);font-size:.78rem;font-weight:600;white-space:nowrap;pointer-events:none;transition:opacity .4s,visibility .4s}
 .sound svg{width:11px;fill:var(--accent)}
 .reel .ph{color:var(--mute);font-size:.85rem;text-align:center;padding:0 24px;position:relative}
-.play{width:68px;height:68px;border-radius:50%;background:var(--accent);display:grid;place-items:center;margin:0 auto 14px;transition:transform .25s}
+
+/* orange play button (shared by hero + cards) */
+.play{position:relative;width:68px;height:68px;border-radius:50%;background:var(--accent);display:grid;place-items:center;margin:0 auto 14px;border:0;padding:0;cursor:pointer;
+box-shadow:0 10px 30px -10px rgba(255,106,61,.65);transition:transform .4s var(--ease),background-color var(--t-fast),box-shadow var(--t) var(--ease),opacity .3s}
+.play::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--accent);opacity:0;pointer-events:none}
 .play svg{width:24px;fill:var(--ink);margin-left:4px}
-.reel:hover .play{transform:scale(1.08)}
+.reel:hover .play,.play:hover{transform:scale(1.08);background:var(--accent2);box-shadow:0 14px 36px -10px rgba(255,106,61,.8)}
+.reel[data-state=idle]:hover .play::after,.thumb:hover .play::after,.play:focus-visible::after{animation:ring 1.8s var(--ease) infinite}
+@media(hover:none){.reel[data-state=idle] .play::after,.card[data-state=idle] .play::after{animation:ring 2.8s var(--ease) infinite}}
 .caps{position:absolute;left:0;right:0;bottom:12%;text-align:center;font:800 1.5rem var(--head);padding:0 16px;pointer-events:none}
 .caps span{background:var(--accent);color:var(--ink);padding:2px 10px;border-radius:6px}
 .reel.has-poster .caps{display:none}
@@ -95,6 +127,26 @@ background:radial-gradient(120% 70% at 20% 0%,rgba(255,106,61,.3),transparent 60
 .playhead::before{content:"";position:absolute;top:0;left:-5px;border:6px solid transparent;border-top-color:var(--accent)}
 @keyframes sweep{from{left:16px}to{left:calc(100% - 18px)}}
 @media(max-width:820px){.hero .wrap{grid-template-columns:1fr}.reel{max-width:260px}}
+
+/* ---------- inline player overlays (hero reel + project cards) ---------- */
+.vs{position:absolute;inset:0;z-index:3;display:grid;place-content:center;justify-items:center;gap:12px;text-align:center;padding:16px;
+background:radial-gradient(120% 70% at 50% 0%,rgba(255,106,61,.2),transparent 60%),rgba(12,12,16,.62);
+opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s var(--ease),visibility .35s}
+.vs p{font-size:.85rem;color:#d4d4da;max-width:26ch}
+.vs .retry{display:none;pointer-events:auto;padding:10px 20px;font-size:.88rem}
+.spin{width:40px;height:40px;border-radius:50%;border:2.5px solid rgba(255,255,255,.14);border-top-color:var(--accent);box-shadow:0 0 22px -4px rgba(255,106,61,.35);animation:spin .85s linear infinite;animation-play-state:paused}
+[data-state=loading] .vs,[data-state=buffering] .vs,[data-state=error] .vs{opacity:1;visibility:visible}
+[data-state=loading] .spin,[data-state=buffering] .spin{animation-play-state:running}
+[data-state=buffering] .vs{background:rgba(0,0,0,.3)}
+[data-state=buffering] .vs p{display:none}
+[data-state=error] .spin{display:none}
+[data-state=error] .vs p{color:#fff}
+[data-state=error] .vs .retry{display:inline-flex}
+.rp{position:absolute;inset:0;z-index:3;display:grid;place-items:center;background:rgba(0,0,0,.5);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .4s var(--ease),visibility .4s}
+.rp .btn{pointer-events:auto;padding:11px 22px;font-size:.92rem}
+[data-state=ended] .rp{opacity:1;visibility:visible}
+/* the video fades in once playback starts (crossfade from the thumbnail) */
+[data-state=playing] video,[data-state=buffering] video,[data-state=ended] video{opacity:1;pointer-events:auto}
 
 /* ---------- about ---------- */
 .about .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(32px,6vw,80px);align-items:start}
@@ -111,47 +163,56 @@ background:radial-gradient(120% 70% at 20% 0%,rgba(255,106,61,.3),transparent 60
 
 /* ---------- services ---------- */
 .services{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-top:44px}
-.svc{position:relative;background:var(--bg);padding:32px 28px;transition:background .25s}
+.svc{position:relative;background:var(--bg);padding:32px 28px;transition:background-color var(--t) var(--ease)}
 .svc:hover{background:var(--panel)}
-.svc .n{position:absolute;top:28px;right:28px;font-size:.78rem;font-weight:700;color:#3a3a43;transition:color .25s}
+.svc .n{position:absolute;top:28px;right:28px;font-size:.78rem;font-weight:700;color:#3a3a43;transition:color var(--t)}
 .svc:hover .n{color:var(--accent)}
-.svc svg{width:30px;height:30px;stroke:var(--accent);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:22px;transition:transform .3s}
+.svc svg{width:30px;height:30px;stroke:var(--accent);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:22px;transition:transform .5s var(--ease)}
 .svc:hover svg{transform:translateY(-3px)}
 .svc h3{font-size:1.25rem;margin-bottom:8px}
 .svc p{color:var(--mute);font-size:.95rem}
 
 /* ---------- projects ---------- */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:26px 22px;margin-top:44px}
-.card{display:flex;flex-direction:column;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.card:focus-visible{outline-offset:6px;border-radius:18px}
-.thumb{position:relative;border-radius:18px;overflow:hidden;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .25s,box-shadow .25s}
-.card:hover .thumb,.card:focus-visible .thumb{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 20px 44px -20px rgba(255,106,61,.4)}
-.ph-art{position:absolute;inset:0;display:grid;place-items:center;
+.card{display:flex;flex-direction:column;-webkit-tap-highlight-color:transparent}
+.thumb{position:relative;border-radius:18px;overflow:hidden;isolation:isolate;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;
+transition:transform .5s var(--ease),border-color var(--t-fast),box-shadow var(--t) var(--ease)}
+.card[data-state=idle] .thumb{cursor:pointer}
+.card[data-state=idle]:hover .thumb,.card[data-state=idle]:focus-within .thumb{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 20px 44px -20px rgba(255,106,61,.4)}
+.card[data-state=playing] .thumb,.card[data-state=buffering] .thumb,.card[data-state=ended] .thumb{border-color:rgba(255,106,61,.5)}
+.ph-art{position:absolute;inset:0;display:grid;place-items:center;transition:transform .9s var(--ease);
 background:linear-gradient(var(--a,160deg),rgba(255,106,61,.28),transparent 58%),repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 18px),#121217}
 .ph-num{font:800 clamp(3.2rem,9vw,4.6rem)/1 var(--head);letter-spacing:-.04em;color:rgba(255,255,255,.14);transform:translateY(-14px)}
 .ph-lbl{position:absolute;left:0;right:0;bottom:14px;text-align:center;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
-.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.thumb .play{position:absolute;width:58px;height:58px;margin:0;opacity:.95;z-index:2;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease)}
+.card[data-state=idle]:hover .thumb img,.card[data-state=idle]:hover .ph-art{transform:scale(1.05)}
+.thumb video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:contain;background:#000;opacity:0;pointer-events:none;transition:opacity .55s var(--ease)}
+.thumb .play{position:absolute;width:58px;height:58px;margin:0;opacity:.95;z-index:2}
 .thumb .play svg{width:20px}
-.card:hover .play{transform:scale(1.1)}
+.card:hover .thumb .play{transform:scale(1.1)}
+.card .thumb .play:active{transform:scale(.94)}
+.card:not([data-state=idle]) .thumb .play{opacity:0;transform:scale(.7);pointer-events:none;visibility:hidden}
 .card h3{font-size:1.2rem;margin:16px 0 4px}
 .cat{color:var(--accent);font-size:.85rem;font-weight:600}
 .card p{color:var(--mute);font-size:.92rem;margin-top:8px}
-.card .btn{align-self:flex-start;margin-top:14px;padding:10px 20px;font-size:.9rem}
-.card:hover .btn{border-color:var(--accent);color:var(--accent)}
+.card>.watch{align-self:flex-start;margin-top:14px;padding:10px 20px;font-size:.9rem}
+.card:hover>.watch{border-color:var(--accent);color:var(--accent)}
 @media(max-width:560px){
   .grid{grid-template-columns:repeat(2,1fr);gap:22px 14px}
   .thumb .play{width:44px;height:44px}.thumb .play svg{width:16px}
   .card h3{font-size:1rem;margin-top:12px}.cat{font-size:.78rem}.card p{font-size:.85rem}
-  .card .btn{display:none}
+  .card>.watch{display:none}
+  .spin{width:30px;height:30px}
+  .vs{gap:8px;padding:10px}.vs p{font-size:.74rem}
+  .vs .retry,.rp .btn{padding:8px 14px;font-size:.8rem}
 }
 
 /* ---------- skills ---------- */
 .skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:40px;margin-top:44px}
 .skills h3{font-size:1.1rem;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line)}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{padding:8px 16px;border:1px solid var(--line);border-radius:999px;font-size:.9rem;color:#dcdce0;transition:border-color .2s,color .2s}
-.chip:hover{border-color:var(--accent);color:#fff}
+.chip{padding:8px 16px;border:1px solid var(--line);border-radius:999px;font-size:.9rem;color:#dcdce0;transition:border-color var(--t-fast),color var(--t-fast),transform var(--t) var(--ease)}
+.chip:hover{border-color:var(--accent);color:#fff;transform:translateY(-2px)}
 .chip.tool{border-color:var(--accent);color:var(--accent);font-weight:700}
 .note{display:block;margin-top:12px;font-size:.82rem;color:var(--mute)}
 
@@ -169,424 +230,11 @@ background:linear-gradient(var(--a,160deg),rgba(255,106,61,.28),transparent 58%)
 /* ---------- contact ---------- */
 .contact h2{font-size:clamp(2.4rem,7vw,5rem);max-width:14ch}
 .links{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:40px 0}
-.links a{display:block;padding:20px 22px;border:1px solid var(--line);border-radius:14px;transition:.2s;position:relative}
-.links a::after{content:"↗";position:absolute;top:18px;right:20px;color:var(--mute);transition:.2s}
-.links a:hover{border-color:var(--accent);background:var(--panel)}
+.links a{display:block;padding:20px 22px;border:1px solid var(--line);border-radius:14px;position:relative;transition:border-color var(--t-fast),background-color var(--t-fast),transform var(--t) var(--ease)}
+.links a::after{content:"↗";position:absolute;top:18px;right:20px;color:var(--mute);transition:transform var(--t) var(--ease),color var(--t-fast)}
+.links a:hover{border-color:var(--accent);background:var(--panel);transform:translateY(-2px)}
 .links a:hover::after{color:var(--accent);transform:translate(2px,-2px)}
+.links a:active{transform:scale(.98)}
 .links a.wa{border-color:var(--accent)}
 .links small{display:block;color:var(--mute);font-size:.8rem}
-.links span{font-weight:600;overflow-wrap:anywhere}
-footer{border-top:1px solid var(--line);padding:28px 0;color:var(--mute);font-size:.85rem}
-
-/* ---------- video modal ---------- */
-dialog{--r:.5625;--mw:420px;position:fixed;border:1px solid var(--line);background:#000;color:#fff;border-radius:18px;padding:0;width:min(92vw,var(--mw),calc(80vh*var(--r)));max-height:94vh;overflow:hidden;transition:width .25s ease}
-dialog::backdrop{background:rgba(0,0,0,.82);backdrop-filter:blur(3px)}
-dialog .frame{position:relative;width:100%;aspect-ratio:9/16;background:#000}
-dialog video{width:100%;height:100%;display:block;object-fit:contain;background:#000}
-/* Loading / error overlay. Initial load uses a branded dark gradient (never a blank black box);
-   .light is used for mid-playback buffering so the paused frame stays visible. */
-.state{position:absolute;inset:0;z-index:1;display:grid;place-content:center;justify-items:center;gap:14px;text-align:center;padding:24px;
-background:radial-gradient(120% 70% at 50% 0%,rgba(255,106,61,.25),transparent 60%),rgba(12,12,16,.8);
-color:#d4d4da;font-size:.95rem;pointer-events:none;transition:background .25s}
-.state.light{background:rgba(0,0,0,.35)}
-.state .btn{pointer-events:auto;padding:10px 22px;font-size:.9rem}
-.spin{width:38px;height:38px;border:3px solid rgba(255,255,255,.18);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.dfoot{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 14px;font-size:.82rem;color:var(--mute);background:var(--bg);border-top:1px solid var(--line)}
-.close{position:absolute;top:10px;right:10px;z-index:2;width:38px;height:38px;border-radius:50%;border:0;background:rgba(0,0,0,.7);color:#fff;font-size:1.2rem;cursor:pointer}
-
-/* ---------- reveal animation ---------- */
-.js .rv{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
-.js .rv.in{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  .playhead{animation:none;left:35%}
-  .status i{animation:none}
-  .spin{animation-duration:2.4s}
-  .js .rv{opacity:1;transform:none;transition:none}
-  .card:hover .thumb,.reel:hover{transform:none}
-}
-</style>
-</head>
-<body>
-
-<nav id="nav"><div class="wrap">
-  <a class="logo" href="#top" data-t="name">Bablu Kumar</a>
-  <ul id="menu">
-    <li><a href="#about">About</a></li><li><a href="#services">Services</a></li><li><a href="#work">Work</a></li><li><a href="#skills">Skills</a></li><li><a href="#process">Workflow</a></li>
-  </ul>
-  <a class="btn primary nav-cta" href="#contact">Hire me</a>
-  <button class="menu" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-</div></nav>
-
-<header class="hero" id="top"><div class="wrap">
-  <div>
-    <div class="role"><b data-t="name">Bablu Kumar</b><span>·</span><span data-t="role">Video Editor</span><span>·</span><span data-t="location">Patna, Bihar, India</span></div>
-    <h1>I Turn Raw Footage Into <em>Scroll-Stopping</em> Videos.</h1>
-    <p class="lead">I'm a video editor with 6–12 months of hands-on experience editing short-form, talking-head and educational videos in Premiere Pro and After Effects. I build each edit around a clear hook, steady pacing and sound that keeps people watching, for creators, agencies and brands.</p>
-    <div class="ctas"><a class="btn primary" href="#work">View My Work</a><a class="btn" href="#contact">Contact Me</a></div>
-    <div class="status"><i></i>Open to freelance projects and full-time roles</div>
-  </div>
-  <div class="reel" id="reel" role="button" tabindex="0" aria-label="Open sample video with sound">
-    <video id="heroVideo" muted loop playsinline preload="none" disablepictureinpicture aria-hidden="true" tabindex="-1"></video>
-    <div class="ph"><div class="play"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></div><span id="reelLbl">Watch a sample</span></div>
-    <div class="caps"><span>HOOK</span> FIRST</div>
-    <span class="sound"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg>Tap to watch with sound</span>
-  </div>
-  <div class="timeline" style="grid-column:1/-1" aria-hidden="true">
-    <div class="tl-meta"><span>Sequence 01</span><span>Hook · Story · Payoff</span></div>
-    <div class="track"><i class="hot" style="--w:3"></i><i style="--w:6"></i><i class="a" style="--w:4"></i><i style="--w:7"></i><i class="a" style="--w:3"></i><i style="--w:6"></i><i class="hot" style="--w:2"></i></div>
-    <div class="track"><i class="g" style="--w:5"></i><i class="g" style="--w:2"></i><i class="g" style="--w:8"></i><i class="g" style="--w:4"></i><i class="g" style="--w:6"></i></div>
-    <div class="track"><i class="a" style="--w:2"></i><i class="a" style="--w:1"></i><i class="a" style="--w:3"></i><i class="a" style="--w:1"></i><i class="a" style="--w:2"></i><i class="a" style="--w:3"></i><i class="a" style="--w:2"></i><i class="a" style="--w:1"></i></div>
-    <div class="playhead"></div>
-  </div>
-</div></header>
-
-<section class="about" id="about"><div class="wrap">
-  <dl class="facts rv">
-    <div><dt>Based in</dt><dd data-t="location">Patna, Bihar, India</dd></div>
-    <div><dt>Experience</dt><dd>6–12 months in video editing</dd></div>
-    <div><dt>Primary software</dt><dd>Premiere Pro, After Effects</dd></div>
-    <div><dt>Open to</dt><dd>Freelance projects and full-time roles</dd></div>
-  </dl>
-  <div class="rv" style="--d:.1s">
-    <span class="eyebrow">01 · About me</span>
-    <h2>Editing that respects the viewer's time.</h2>
-    <p class="big">I'm a video editor based in Patna, India, with 6–12 months of hands-on editing experience.</p>
-    <p>I focus on short-form content, talking-head videos and educational or AI-automation explainers. I edit in Premiere Pro and After Effects, building each video around a clear hook, steady pacing, dynamic captions, B-roll and sound design so the story stays easy to follow.</p>
-    <p>I'm early in my editing career and keen to keep improving. I'm open to freelance projects as well as a full-time video editor role with a team that cares about video quality.</p>
-    <div class="aud">
-      <h3>Who I edit for</h3>
-      <div class="chips"><span class="chip">Content creators</span><span class="chip">YouTubers</span><span class="chip">Instagram creators</span><span class="chip">Marketing agencies</span><span class="chip">Business owners</span><span class="chip">Companies hiring editors</span></div>
-    </div>
-  </div>
-</div></section>
-
-<section id="services"><div class="wrap">
-  <span class="eyebrow rv">02 · Services</span>
-  <h2 class="rv">What I can edit for you.</h2>
-  <p class="lead rv">Six types of video I can help with.</p>
-  <div class="services rv">
-    <div class="svc"><span class="n">01</span><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg><h3>Short-form Video Editing</h3><p>Instagram Reels and YouTube Shorts with a clear hook, tight pacing and captions made for sound-off viewing.</p></div>
-    <div class="svc"><span class="n">02</span><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 4-7 8-7s7 2 8 7"/></svg><h3>Talking Head Editing</h3><p>Clean cuts, jump-cut rhythm, zooms and B-roll that keep a single speaker engaging.</p></div>
-    <div class="svc"><span class="n">03</span><svg viewBox="0 0 24 24"><path d="M3 6l9-3 9 3-9 3z"/><path d="M7 9v6c0 1 2.5 3 5 3s5-2 5-3V9"/></svg><h3>Educational Video Editing</h3><p>Lessons and tutorials structured into clear, easy-to-follow visual steps.</p></div>
-    <div class="svc"><span class="n">04</span><svg viewBox="0 0 24 24"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg><h3>AI Explainer Videos</h3><p>AI and automation topics explained with simple visuals, on-screen text and B-roll.</p></div>
-    <div class="svc"><span class="n">05</span><svg viewBox="0 0 24 24"><rect x="3" y="3" width="12" height="12" rx="2"/><circle cx="16" cy="16" r="5"/></svg><h3>Motion Graphics</h3><p>Animated text, callouts and smooth transitions that support the story instead of distracting from it.</p></div>
-    <div class="svc"><span class="n">06</span><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M9 6h6a3 3 0 013 3v6M15 18H9a3 3 0 01-3-3V9"/></svg><h3>Social Media Video Editing</h3><p>Videos edited and formatted for social platforms, with captions and sound design.</p></div>
-  </div>
-</div></section>
-
-<section id="work"><div class="wrap">
-  <span class="eyebrow rv">03 · Featured projects</span>
-  <h2 class="rv">Selected work.</h2>
-  <p class="lead rv">Tap any project to watch it.</p>
-  <div class="grid" id="grid"></div>
-  <noscript><p class="lead">Please enable JavaScript to watch the projects.</p></noscript>
-</div></section>
-
-<section id="skills"><div class="wrap">
-  <span class="eyebrow rv">04 · Skills</span>
-  <h2 class="rv">Editing skills.</h2>
-  <div class="skills rv">
-    <div><h3>Primary software</h3><div class="chips"><span class="chip tool">Premiere Pro</span><span class="chip tool">After Effects</span></div><span class="note">All my edits are made in Premiere Pro and After Effects.</span></div>
-    <div><h3>Formats</h3><div class="chips"><span class="chip">Short-form editing</span><span class="chip">Instagram Reels</span><span class="chip">YouTube Shorts</span><span class="chip">Talking-head editing</span><span class="chip">Educational videos</span><span class="chip">AI automation explainers</span></div></div>
-    <div><h3>Story &amp; retention</h3><div class="chips"><span class="chip">Hook &amp; retention editing</span><span class="chip">Visual storytelling</span><span class="chip">Smooth transitions</span><span class="chip">B-roll selection &amp; placement</span></div></div>
-    <div><h3>Polish</h3><div class="chips"><span class="chip">Motion graphics</span><span class="chip">Dynamic captions</span><span class="chip">Subtitles</span><span class="chip">Sound design</span><span class="chip">Sound effects</span></div></div>
-  </div>
-</div></section>
-
-<section id="process"><div class="wrap">
-  <span class="eyebrow rv">05 · Workflow</span>
-  <h2 class="rv">From raw footage to final video.</h2>
-  <div class="flow rv">
-    <div class="step"><small>01</small><h3>Raw Footage</h3><p>I review everything and pick the strongest moments.</p></div>
-    <div class="step"><small>02</small><h3>Storytelling</h3><p>I plan the hook, structure and payoff.</p></div>
-    <div class="step"><small>03</small><h3>Editing</h3><p>I cut for pace, then add B-roll, captions and sound.</p></div>
-    <div class="step"><small>04</small><h3>Motion Graphics</h3><p>I add animation that clarifies the message.</p></div>
-    <div class="step"><small>05</small><h3>Final Video</h3><p>I export in the right format for each platform.</p></div>
-  </div>
-</div></section>
-
-<section class="contact" id="contact"><div class="wrap">
-  <span class="eyebrow rv">06 · Contact</span>
-  <h2 class="rv">Let's edit something people finish watching.</h2>
-  <p class="lead rv">Send me your footage and what you want the video to achieve. I'm available for freelance projects and full-time video editing roles.</p>
-  <div class="links rv" id="links"></div>
-  <div class="ctas rv"><a class="btn primary" id="hire" href="#">Email me</a><a class="btn" id="wa" href="#" target="_blank" rel="noopener">Message on WhatsApp</a></div>
-</div></section>
-
-<footer><div class="wrap">© <span id="yr"></span> <span data-t="name">Bablu Kumar</span> · <span data-t="role">Video Editor</span> · <span data-t="location">Patna, Bihar, India</span></div></footer>
-
-<dialog id="dlg" aria-label="Video player">
-  <button class="close" aria-label="Close video">✕</button>
-  <div class="frame" id="frame">
-    <!-- preload="none": nothing is downloaded until a visitor picks a project -->
-    <video id="player" controls playsinline preload="none"></video>
-    <div class="state" id="vstate" role="status" aria-live="polite" hidden>
-      <div class="spin" id="spin"></div>
-      <p id="smsg">Loading video…</p>
-      <button class="btn retry" id="retry" type="button" hidden>Try again</button>
-    </div>
-  </div>
-  <div class="dfoot"><span id="dtitle"></span></div>
-</dialog>
-
-<script>
-/* =====================================================
-   EDIT YOUR DETAILS HERE — everything on the site
-   comes from this one block.
-   ===================================================== */
-const CONFIG = {
-  name: "Bablu Kumar",
-  role: "Video Editor",
-  location: "Patna, Bihar, India",
-
-  /* Contact — shown only in the Contact section */
-  email: "abablu12345z@gmail.com",
-  whatsapp: "919006608953",            // country code + number, no + or spaces
-  whatsappDisplay: "+91 9006608953",
-  whatsappMessage: "Hi Bablu, I saw your portfolio and would like to discuss a video editing project.",
-  instagram: "https://www.instagram.com/bablu_302_kumar?evlk=MWF6bGVobnZhaGo4YQ==",
-  instagramHandle: "@bablu_302_kumar",
-  linkedin: "https://www.linkedin.com/in/bablu-kumar-9ba34a436",
-
-  /* Hero video card. Clicking it opens the sample in the player (Video Project 1 unless `video` is set).
-     poster      : optional image shown on the card and while the video loads.
-     livePreview : false (recommended) = no video is downloaded until the visitor taps the card.
-                   true  = muted looping preview that downloads Project 1 as soon as the page loads
-                           (this competes with the video the visitor opens, so it can cause buffering). */
-  reel: { video: "", poster: "", livePreview: false },
-
-  /* Your six projects. Every video plays inside the site (no redirects).
-     link  : direct video URL (.mp4, or a Cloudinary .mov URL that contains f_mp4: keep f_mp4 in it).
-             It is only given to the player AFTER the visitor taps the card.
-     thumb : optional image (file or URL) shown on the card and as the player's poster.
-             Leave "" to show the styled placeholder (no video is loaded for thumbnails).
-     desc  : optional one-line description (hidden when empty)
-     ratio : optional card shape, "9/16" (default) or "16/9". The player adapts to the real video size. */
-  projects: [
-    {title:"Video Project 1", category:"Edited video sample", desc:"", thumb:"", link:"https://res.cloudinary.com/ms2bjc3r/video/upload/f_mp4/v1794973211/1118_5.mov"},
-    {title:"Video Project 2", category:"Edited video sample", desc:"", thumb:"", link:"https://res.cloudinary.com/ms2bjc3r/video/upload/f_mp4/v1794973239/1118_2.mov"},
-    {title:"Video Project 3", category:"Edited video sample", desc:"", thumb:"", link:"https://res.cloudinary.com/ms2bjc3r/video/upload/f_mp4/v1794973288/1118_3.mov"},
-    {title:"Video Project 4", category:"Edited video sample", desc:"", thumb:"", link:"https://res.cloudinary.com/ms2bjc3r/video/upload/f_mp4/v1794973055/1118_1.mov"},
-    {title:"Video Project 5", category:"Edited video sample", desc:"", thumb:"", link:"https://res.cloudinary.com/ms2bjc3r/video/upload/f_mp4/v1794972957/1118.mov"},
-    {title:"Video Project 6", category:"Edited video sample", desc:"", thumb:"", link:"https://res.cloudinary.com/ms2bjc3r/video/upload/f_mp4/v1794973190/1118_4.mov"}
-  ]
-};
-/* ===================== end of settings ===================== */
-
-/* ---------- helpers & element references ---------- */
-const $ = s => document.querySelector(s);
-const $$ = s => [...document.querySelectorAll(s)];
-const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const playSvg = '<div class="play"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></div>';
-const reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-const reel = $('#reel'), hero = $('#heroVideo');
-const dlg = $('#dlg'), player = $('#player');
-
-/* ---------- text from CONFIG ---------- */
-['name', 'role', 'location'].forEach(k => $$(`[data-t="${k}"]`).forEach(e => e.textContent = CONFIG[k]));
-document.title = `${CONFIG.name} — ${CONFIG.role}`;
-$('#yr').textContent = new Date().getFullYear();
-
-/* ---------- hero card ----------
-   By default the card is just a poster/placeholder: NO video URL is assigned on page load.
-   Only when CONFIG.reel.livePreview is true does it play a muted loop (opt-in). */
-const heroProject = CONFIG.projects[0] || {};
-const heroLink = CONFIG.reel.video || heroProject.link || '';
-const livePreview = !!CONFIG.reel.livePreview && !!heroLink && !reduceMotion;
-let heroVisible = true;
-
-function heroSync() {
-  if (!livePreview || reel.classList.contains('failed')) return;
-  if (heroVisible && !dlg.open && !document.hidden) {
-    if (!hero.getAttribute('src')) hero.src = heroLink;
-    const p = hero.play(); if (p && p.catch) p.catch(() => {});
-  } else {
-    hero.pause();
-    if (dlg.open && hero.getAttribute('src')) {      // free the connection while the modal video loads
-      hero.removeAttribute('src'); hero.load(); reel.classList.remove('ready');
-    }
-  }
-}
-
-if (CONFIG.reel.poster) {
-  const img = new Image();
-  img.alt = '';
-  img.onload = () => { reel.insertBefore(img, reel.firstChild); reel.classList.add('has-poster'); reel.querySelector('.ph').innerHTML = playSvg; };
-  img.src = CONFIG.reel.poster;
-}
-if (livePreview) {
-  hero.muted = true; hero.defaultMuted = true; hero.loop = true; hero.playsInline = true;
-  hero.addEventListener('playing', () => reel.classList.add('ready'));
-  hero.addEventListener('error', () => {
-    if (!hero.getAttribute('src')) return;           // ignore the event caused by releasing the source
-    reel.classList.remove('ready'); reel.classList.add('failed');
-  });
-  heroSync();
-  if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; heroSync(); }).observe(reel);
-  document.addEventListener('visibilitychange', heroSync);
-}
-
-/* ---------- project cards ----------
-   Cards never touch the video URLs: they show an image thumbnail if `thumb` is set,
-   otherwise the styled placeholder. The video is requested only after a tap. */
-$('#grid').innerHTML = CONFIG.projects.map((p, i) => {
-  const [w, h] = (p.ratio || '9/16').split('/').map(Number);
-  return `
-  <article class="card rv" style="--d:${(i % 3) * .08}s" data-i="${i}" role="button" tabindex="0" aria-label="Watch ${esc(p.title)}">
-    <div class="thumb" style="aspect-ratio:${w} / ${h}">
-      <div class="ph-art" style="--a:${(i * 47 + 130) % 360}deg"><span class="ph-num">${String(i + 1).padStart(2, '0')}</span><span class="ph-lbl">Tap to watch</span></div>
-      ${p.thumb ? `<img src="${esc(p.thumb)}" alt="${esc(p.title)}" loading="lazy" decoding="async" onerror="this.remove()">` : ''}
-      ${playSvg}
-    </div>
-    <h3>${esc(p.title)}</h3><div class="cat">${esc(p.category)}</div>
-    ${p.desc ? `<p>${esc(p.desc)}</p>` : ''}
-    <button class="btn" type="button" tabindex="-1">Watch video</button>
-  </article>`;
-}).join('');
-
-/* ---------- contact ---------- */
-const waUrl = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(CONFIG.whatsappMessage)}`;
-const mailUrl = `mailto:${CONFIG.email}?subject=${encodeURIComponent('Video editing project')}`;
-const contacts = [
-  ["Email", CONFIG.email, mailUrl, false, ""],
-  ["WhatsApp", CONFIG.whatsappDisplay, waUrl, true, "wa"],
-  ["Instagram", CONFIG.instagramHandle, CONFIG.instagram, true, ""],
-  ["LinkedIn", "Bablu Kumar", CONFIG.linkedin, true, ""]
-];
-$('#links').innerHTML = contacts.map(c =>
-  `<a class="${c[4]}" href="${esc(c[2])}"${c[3] ? ' target="_blank" rel="noopener"' : ''}><small>${c[0]}</small><span>${esc(c[1])}</span></a>`).join('');
-$('#hire').href = mailUrl;
-$('#wa').href = waUrl;
-
-/* ---------- in-page video modal (native HTML5 player, nothing opens externally) ----------
-   Flow: tap card -> modal opens with spinner -> URL is assigned to the player -> play()
-   -> spinner hides on canplay/playing -> close = pause, remove src, load() to free memory/network.
-   The URL is used exactly as written in CONFIG: no quality, size or bitrate parameters are added,
-   and the browser fetches it with its normal progressive download / HTTP range requests. */
-const frame = $('#frame'), state = $('#vstate'), smsg = $('#smsg'), spin = $('#spin'), retry = $('#retry');
-const MAX_AUTO_RETRIES = 2;                          // silent retries before showing the error + button
-let lastFocus = null, current = {url: '', title: ''}, slowTimer = null, retryTimer = null;
-let autoRetries = 0, started = false;                // started = this selection has begun playing
-
-function setState(mode, msg, light) {                // mode: 'loading' | 'error' | null
-  clearTimeout(slowTimer);
-  state.hidden = !mode;
-  if (!mode) return;
-  state.classList.toggle('light', !!light);
-  spin.hidden = mode === 'error';
-  retry.hidden = !(mode === 'error' && current.url);
-  smsg.textContent = msg;
-  if (mode === 'loading') slowTimer = setTimeout(() => { smsg.textContent = 'Still loading... the first play can take a moment.'; }, 12000);
-}
-function setRatio(w, h) {                            // fits portrait and landscape videos
-  dlg.style.setProperty('--r', w / h);
-  dlg.style.setProperty('--mw', w > h ? '960px' : '420px');
-  frame.style.aspectRatio = `${w} / ${h}`;
-}
-function tryPlay() {
-  const p = player.play();
-  if (p && p.catch) p.catch(() => {});               // blocked autoplay just leaves the native play button
-}
-function loadPlayer() {
-  clearTimeout(retryTimer);
-  started = false;
-  setState('loading', 'Loading video...');
-  player.preload = 'auto';                           // the visitor chose this video: let it buffer ahead
-  player.src = current.url;                          // the ONLY place a project URL reaches the player
-  player.load();
-  tryPlay();                                         // runs inside the visitor's tap, so it is allowed
-}
-function releasePlayer() {                           // stop playback and free the network/memory
-  clearTimeout(retryTimer);
-  player.pause();
-  player.removeAttribute('src');
-  player.removeAttribute('poster');
-  player.preload = 'none';
-  player.load();
-}
-function errorMessage(code) {
-  if (code === 2) return 'A network problem interrupted the video. Check your connection and try again.';
-  if (code === 3) return 'Your browser could not play this video. Try again or use another browser.';
-  return 'This video is not available right now. Please try again in a moment.';
-}
-
-player.addEventListener('loadedmetadata', () => { if (player.videoWidth && player.videoHeight) setRatio(player.videoWidth, player.videoHeight); });
-player.addEventListener('canplay', () => {
-  setState(null);
-  if (!started && dlg.open && player.paused) tryPlay();   // start as soon as the selected video is ready
-});
-player.addEventListener('playing', () => { started = true; autoRetries = 0; setState(null); });
-player.addEventListener('waiting', () => {
-  if (!dlg.open || !player.getAttribute('src')) return;
-  setState('loading', started ? 'Buffering...' : 'Loading video...', started);
-});
-player.addEventListener('pause', () => { if (started && dlg.open) setState(null); });   // no spinner on a paused video
-player.addEventListener('error', () => {
-  if (!dlg.open || !player.getAttribute('src')) return;   // ignore events caused by releasing the source
-  const code = player.error ? player.error.code : 0;
-  /* Cloudinary can answer the very first request for a freshly converted .mov -> .mp4 with a temporary
-     "still processing" response. Network/source errors are retried quietly a couple of times first. */
-  if (code !== 3 && autoRetries < MAX_AUTO_RETRIES) {
-    autoRetries++;
-    setState('loading', 'Preparing your video...');
-    clearTimeout(retryTimer);
-    retryTimer = setTimeout(() => { if (dlg.open && current.url) loadPlayer(); }, 4000);
-    return;
-  }
-  setState('error', errorMessage(code));
-});
-retry.addEventListener('click', () => { autoRetries = 0; loadPlayer(); });
-
-function openVideo(url, title, ratio, poster) {
-  if (dlg.open) return;
-  current = {url: url || '', title: title || ''};
-  autoRetries = 0; started = false;
-  const [w, h] = (ratio || '9/16').split('/').map(Number);
-  setRatio(w, h);
-  $('#dtitle').textContent = current.title;
-  if (poster) player.poster = poster; else player.removeAttribute('poster');
-  lastFocus = document.activeElement;
-  dlg.showModal();
-  heroSync();
-  if (current.url) loadPlayer();
-  else setState('error', 'This video link has not been added yet. Add it in the CONFIG section.');
-}
-dlg.addEventListener('close', () => {
-  releasePlayer();
-  setState(null);
-  if (lastFocus) lastFocus.focus();
-  heroSync();
-});
-dlg.querySelector('.close').onclick = () => dlg.close();
-dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
-
-const openProject = el => {
-  const p = CONFIG.projects[el.dataset.i];
-  openVideo(p.link, p.title, p.ratio, p.thumb);
-};
-$('#grid').addEventListener('click', e => { const c = e.target.closest('[data-i]'); if (c) openProject(c); });
-$('#grid').addEventListener('keydown', e => {
-  const c = e.target.closest('[data-i]');
-  if (c && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openProject(c); }
-});
-const openReel = () => openVideo(heroLink, CONFIG.reel.video ? 'Showreel' : heroProject.title, CONFIG.reel.video ? CONFIG.reel.ratio : heroProject.ratio, CONFIG.reel.poster || heroProject.thumb);
-reel.addEventListener('click', openReel);
-reel.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openReel(); } });
-
-/* ---------- mobile menu ---------- */
-const nav = $('#nav'), menuBtn = $('#menuBtn');
-const setMenu = open => { nav.classList.toggle('open', open); menuBtn.setAttribute('aria-expanded', open); };
-menuBtn.addEventListener('click', () => setMenu(!nav.classList.contains('open')));
-$$('#menu a').forEach(a => a.addEventListener('click', () => setMenu(false)));
-
-/* ---------- reveal on scroll ---------- */
-const rv = $$('.rv');
-if ('IntersectionObserver' in window) {
-  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), {threshold: .12, rootMargin: '0px 0px -40px 0px'});
-  rv.forEach(el => io.observe(el));
-} else rv.forEach(el => el.classList.add('in'));
-</script>
-</body>
-</html>
+.links span{font-weight:600;overflo
