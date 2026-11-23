@@ -145,11 +145,8 @@ opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s var(--ea
 .rp{position:absolute;inset:0;z-index:3;display:grid;place-items:center;background:rgba(0,0,0,.5);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .4s var(--ease),visibility .4s}
 .rp .btn{pointer-events:auto;padding:11px 22px;font-size:.92rem}
 [data-state=ended] .rp{opacity:1;visibility:visible}
-/* the video fades in once playback starts (crossfade from the thumbnail).
-   These selectors must be MORE specific than `.thumb video` / `.reel video` (which start at opacity 0);
-   with equal specificity the later rule wins and the picture stays invisible while the audio plays. */
-.card[data-state=playing] .thumb video,.card[data-state=buffering] .thumb video,.card[data-state=ended] .thumb video,
-.reel[data-state=playing] video,.reel[data-state=buffering] video,.reel[data-state=ended] video{opacity:1;pointer-events:auto}
+/* the video fades in once playback starts (crossfade from the thumbnail) */
+[data-state=playing] video,[data-state=buffering] video,[data-state=ended] video{opacity:1;pointer-events:auto}
 
 /* ---------- about ---------- */
 .about .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(32px,6vw,80px);align-items:start}
@@ -235,4 +232,9 @@ background:linear-gradient(var(--a,160deg),rgba(255,106,61,.28),transparent 58%)
 .links{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:40px 0}
 .links a{display:block;padding:20px 22px;border:1px solid var(--line);border-radius:14px;position:relative;transition:border-color var(--t-fast),background-color var(--t-fast),transform var(--t) var(--ease)}
 .links a::after{content:"↗";position:absolute;top:18px;right:20px;color:var(--mute);transition:transform var(--t) var(--ease),color var(--t-fast)}
-.l
+.links a:hover{border-color:var(--accent);background:var(--panel);transform:translateY(-2px)}
+.links a:hover::after{color:var(--accent);transform:translate(2px,-2px)}
+.links a:active{transform:scale(.98)}
+.links a.wa{border-color:var(--accent)}
+.links small{display:block;color:var(--mute);font-size:.8rem}
+.links span{font-weight:600;overflo
