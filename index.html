@@ -130,7 +130,9 @@ background:radial-gradient(120% 70% at 20% 0%,rgba(255,106,61,.3),transparent 60
 background:linear-gradient(var(--a,160deg),rgba(255,106,61,.28),transparent 58%),repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 18px),#121217}
 .ph-num{font:800 clamp(3.2rem,9vw,4.6rem)/1 var(--head);letter-spacing:-.04em;color:rgba(255,255,255,.14);transform:translateY(-14px)}
 .ph-lbl{position:absolute;left:0;right:0;bottom:14px;text-align:center;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
-.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.thumb img,.thumb video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.thumb video{opacity:0;transition:opacity .5s ease;pointer-events:none}
+.thumb.vready video{opacity:1}
 .thumb .play{position:absolute;width:58px;height:58px;margin:0;opacity:.95;z-index:2;box-shadow:0 8px 24px rgba(0,0,0,.4)}
 .thumb .play svg{width:20px}
 .card:hover .play{transform:scale(1.1)}
@@ -183,14 +185,9 @@ dialog{--r:.5625;--mw:420px;position:fixed;border:1px solid var(--line);backgrou
 dialog::backdrop{background:rgba(0,0,0,.82);backdrop-filter:blur(3px)}
 dialog .frame{position:relative;width:100%;aspect-ratio:9/16;background:#000}
 dialog video{width:100%;height:100%;display:block;object-fit:contain;background:#000}
-/* Loading / error overlay. Initial load uses a branded dark gradient (never a blank black box);
-   .light is used for mid-playback buffering so the paused frame stays visible. */
-.state{position:absolute;inset:0;z-index:1;display:grid;place-content:center;justify-items:center;gap:14px;text-align:center;padding:24px;
-background:radial-gradient(120% 70% at 50% 0%,rgba(255,106,61,.25),transparent 60%),rgba(12,12,16,.8);
-color:#d4d4da;font-size:.95rem;pointer-events:none;transition:background .25s}
-.state.light{background:rgba(0,0,0,.35)}
+.state{position:absolute;inset:0;z-index:1;display:grid;place-content:center;justify-items:center;gap:14px;text-align:center;padding:24px;background:rgba(0,0,0,.55);color:var(--mute);font-size:.95rem;pointer-events:none}
 .state .btn{pointer-events:auto;padding:10px 22px;font-size:.9rem}
-.spin{width:38px;height:38px;border:3px solid rgba(255,255,255,.18);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+.spin{width:34px;height:34px;border:3px solid rgba(255,255,255,.18);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .dfoot{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 14px;font-size:.82rem;color:var(--mute);background:var(--bg);border-top:1px solid var(--line)}
 .close{position:absolute;top:10px;right:10px;z-index:2;width:38px;height:38px;border-radius:50%;border:0;background:rgba(0,0,0,.7);color:#fff;font-size:1.2rem;cursor:pointer}
@@ -228,7 +225,7 @@ color:#d4d4da;font-size:.95rem;pointer-events:none;transition:background .25s}
     <div class="status"><i></i>Open to freelance projects and full-time roles</div>
   </div>
   <div class="reel" id="reel" role="button" tabindex="0" aria-label="Open sample video with sound">
-    <video id="heroVideo" muted loop playsinline preload="none" disablepictureinpicture aria-hidden="true" tabindex="-1"></video>
+    <video id="heroVideo" muted loop autoplay playsinline preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1"></video>
     <div class="ph"><div class="play"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg></div><span id="reelLbl">Watch a sample</span></div>
     <div class="caps"><span>HOOK</span> FIRST</div>
     <span class="sound"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z"/></svg>Tap to watch with sound</span>
@@ -254,4 +251,7 @@ color:#d4d4da;font-size:.95rem;pointer-events:none;transition:background .25s}
     <h2>Editing that respects the viewer's time.</h2>
     <p class="big">I'm a video editor based in Patna, India, with 6–12 months of hands-on editing experience.</p>
     <p>I focus on short-form content, talking-head videos and educational or AI-automation explainers. I edit in Premiere Pro and After Effects, building each video around a clear hook, steady pacing, dynamic captions, B-roll and sound design so the story stays easy to follow.</p>
-    <p>I'm early in my editing career and keen to keep improving. I'm open to freelance projects as
+    <p>I'm early in my editing career and keen to keep improving. I'm open to freelance projects as well as a full-time video editor role with a team that cares about video quality.</p>
+    <div class="aud">
+      <h3>Who I edit for</h3>
+      <div class="chips"><span class="chip">Content creat
